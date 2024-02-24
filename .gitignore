@@ -1,3 +1,6 @@
+secrets.yaml
+.esphome
+
 # Prerequisites
 *.d
 
