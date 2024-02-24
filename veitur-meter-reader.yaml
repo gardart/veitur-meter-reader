@@ -1,0 +1,173 @@
+substitutions:
+  name: "veitur-meter-reader"
+
+esphome:
+  name: "${name}"  
+  includes:
+    - veitur-meter-reader.h
+
+  # Automatically add the mac address to the name
+  name_add_mac_suffix: true
+
+  project:
+    name: esphome.${name}"
+    version: "1.0"
+
+esp8266:
+  board: d1
+
+# API is a requirement of the dashboard import.
+api:
+
+# OTA is required for Over-the-Air updating
+ota:
+
+wifi:
+#  ssid: !secret wifi_ssid
+#  password: !secret wifi_password
+  # Optional static IP
+#  manual_ip:
+#    static_ip: !secret wifi_ipaddress
+#    gateway: !secret wifi_gateway
+#    subnet: !secret wifi_subnet
+  ap:
+    ssid:  "${name}"
+    password: "123456789"
+
+
+captive_portal:
+
+# Enable logging
+logger:
+  level: DEBUG # or INFO
+  baud_rate: 0 # disable logging over uart
+  esp8266_store_log_strings_in_flash: false # Avoid flash wear and tear
+
+# Create a switch to trigger P1 data request from meter
+switch:
+  - platform: gpio
+    name: "P1 Request Trigger"
+    pin: D5
+    id: p1_request
+# Request data every 10s
+interval:
+  - interval: 10s
+    then:
+      - switch.turn_on: p1_request
+      - delay: 50ms
+      - switch.turn_off: p1_request
+
+uart:
+  id: uart_bus
+  rx_pin: D7
+  rx_buffer_size: 3072
+  baud_rate: 9600
+  data_bits: 7
+  parity: NONE
+  stop_bits: 1
+
+sensor:
+- platform: custom
+  lambda: |-
+    auto meter_sensor = new MeterReader(id(uart_bus));
+    App.register_component(meter_sensor);
+    return {
+      meter_sensor->cumulativeActiveImport,
+      meter_sensor->momentaryActiveImport,
+      meter_sensor->momentaryActiveImportL1,
+      meter_sensor->momentaryActiveImportL2,
+      meter_sensor->momentaryActiveImportL3,
+      meter_sensor->voltageL1,
+      meter_sensor->voltageL2,
+      meter_sensor->voltageL3,
+      meter_sensor->currentL1,
+      meter_sensor->currentL2,
+      meter_sensor->currentL3,
+      meter_sensor->hotWaterVolume,
+      meter_sensor->hotWaterFlowRate,
+      meter_sensor->inletWaterTemperature,
+      meter_sensor->outletWaterTemperature,
+      meter_sensor->energyContentVolume,
+      meter_sensor->energyFlowRate
+    };
+  sensors:
+  - name: "Cumulative Active Import"
+    unit_of_measurement: kWh
+    accuracy_decimals: 3
+    state_class: "total_increasing"
+    device_class: "energy"
+  - name: "Momentary Active Import"
+    unit_of_measurement: kW
+    accuracy_decimals: 3
+    state_class: "measurement"
+    device_class: "power"
+  - name: "Momentary Active Import Phase 1"
+    unit_of_measurement: kW
+    accuracy_decimals: 3
+    state_class: "measurement"
+    device_class: "power"
+  - name: "Momentary Active Import Phase 2"
+    unit_of_measurement: kW
+    accuracy_decimals: 3
+    state_class: "measurement"
+    device_class: "power"
+  - name: "Momentary Active Import Phase 3"
+    unit_of_measurement: kW
+    accuracy_decimals: 3
+    state_class: "measurement"
+    device_class: "power"
+  - name: "Voltage Phase 1"
+    unit_of_measurement: V
+    accuracy_decimals: 3
+    state_class: "measurement"
+    device_class: "voltage"
+  - name: "Voltage Phase 2"
+    unit_of_measurement: V
+    accuracy_decimals: 3
+    state_class: "measurement"
+    device_class: "voltage"
+  - name: "Voltage Phase 3"
+    unit_of_measurement: V
+    accuracy_decimals: 3
+    state_class: "measurement"
+    device_class: "voltage"
+  - name: "Current Phase 1"
+    unit_of_measurement: A
+    accuracy_decimals: 3
+    state_class: "measurement"
+    device_class: "current"
+  - name: "Current Phase 2"
+    unit_of_measurement: A
+    accuracy_decimals: 3
+    state_class: "measurement"
+    device_class: "current"
+  - name: "Current Phase 3"
+    unit_of_measurement: A
+    accuracy_decimals: 3
+    state_class: "measurement"
+    device_class: "current"
+  - name: "Hot Water Volume"
+    unit_of_measurement: m³
+    accuracy_decimals: 3
+    state_class: "total_increasing"
+    device_class: "water"
+  - name: "Hot Water Flow Rate"
+    unit_of_measurement: m³/h
+    accuracy_decimals: 3
+    state_class: "measurement"
+  - name: "Inlet Water Temperature"
+    unit_of_measurement: °C
+    accuracy_decimals: 1
+    state_class: "measurement"
+  - name: "Outlet Water Temperature"
+    unit_of_measurement: °C
+    accuracy_decimals: 1
+    state_class: "measurement"
+  - name: "Energy Content Volume"
+    unit_of_measurement: kWh
+    accuracy_decimals: 3
+    state_class: "measurement"
+  - name: "Energy Flow Rate"
+    unit_of_measurement: kW
+    accuracy_decimals: 3
+    state_class: "measurement"
