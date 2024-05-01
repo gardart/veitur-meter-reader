@@ -2,7 +2,7 @@ substitutions:
   name: "veitur-meter-reader"
 
 esphome:
-  name: "${name}"  
+  name: "${name}"
   includes:
     - veitur-meter-reader.h
 
@@ -23,8 +23,8 @@ api:
 ota:
 
 wifi:
-#  ssid: !secret wifi_ssid
-#  password: !secret wifi_password
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
   # Optional static IP
 #  manual_ip:
 #    static_ip: !secret wifi_ipaddress
@@ -33,7 +33,6 @@ wifi:
   ap:
     ssid:  "${name}"
     password: "123456789"
-
 
 captive_portal:
 
@@ -88,7 +87,8 @@ sensor:
       meter_sensor->inletWaterTemperature,
       meter_sensor->outletWaterTemperature,
       meter_sensor->energyContentVolume,
-      meter_sensor->energyFlowRate
+      meter_sensor->energyFlowRate,
+      meter_sensor->meterId
     };
   sensors:
   - name: "Cumulative Active Import"
@@ -171,3 +171,4 @@ sensor:
     unit_of_measurement: kW
     accuracy_decimals: 3
     state_class: "measurement"
+  - name: "Meter ID"
