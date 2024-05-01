@@ -21,6 +21,7 @@ public:
     double outletWaterTemperature = 0.0;
     double energyContentVolume = 0.0;
     double energyFlowRate = 0.0;
+    double meterId = 0.0;
 };
 
 class MeterReader : public Component, public UARTDevice {
@@ -45,6 +46,7 @@ public:
     Sensor *outletWaterTemperature = new Sensor();
     Sensor *energyContentVolume = new Sensor();
     Sensor *energyFlowRate = new Sensor();
+    Sensor *meterId = new Sensor();
 
     MeterReader(UARTComponent *parent) : UARTDevice(parent) {}
 
@@ -62,14 +64,19 @@ private:
         ESP_LOGD("MREADER", "fullcode: %s", fullCode);
         ESP_LOGD("MREADER", "value: %s", value);
 
-        // 
+        //
         // Parsing logic for OBIS codes
-        // 
+        //
+
+        // Meter ID
+        if (strcmp(fullCode, "0-0:96.1.0") == 0) {
+        meterReadings->meterId = atof(value); // Store the meter ID
+        }
 
         // Electricity delivered to client (cumulative/increasing) -  Total kWh
         if (strcmp(fullCode, "1-0:1.8.0") == 0) {
             meterReadings->cumulativeActiveImport = atof(value);
-        } 
+        }
         // Electricity delivered to client (instantaneous) kW
         else if (strcmp(fullCode, "1-0:1.7.0") == 0) {
             meterReadings->momentaryActiveImport = atof(value);
@@ -96,7 +103,7 @@ private:
         }
         else if (strcmp(fullCode, "1-0:51.7.0") == 0) {
             meterReadings->currentL2 = atof(value);
-        } 
+        }
         else if (strcmp(fullCode, "1-0:71.7.0") == 0) {
             meterReadings->currentL3 = atof(value);
         }
@@ -105,14 +112,14 @@ private:
         else if (strcmp(fullCode, "1-0:32.7.0") == 0) {
             meterReadings->voltageL1 = atof(value);
         }
-        
+
         else if (strcmp(fullCode, "1-0:52.7.0") == 0) {
             meterReadings->voltageL2 = atof(value);
-        } 
-        
+        }
+
         else if (strcmp(fullCode, "1-0:72.7.0") == 0) {
             meterReadings->voltageL3 = atof(value);
-        } 
+        }
 
         // Hot water related data (from hot water sub-meter)
         // Hot water volume - Total cubic meters
@@ -125,7 +132,7 @@ private:
         }
         // Current inlet water temperature in degrees Celsius
         else if (strcmp(fullCode, "0-1:24.2.3") == 0) {
-            meterReadings->inletWaterTemperature = atof(value); 
+            meterReadings->inletWaterTemperature = atof(value);
         }
         // Current outlet water temperature in degrees Celsius
         else if (strcmp(fullCode, "0-1:24.2.4") == 0) {
@@ -160,6 +167,7 @@ private:
         outletWaterTemperature->publish_state(meterReadings->outletWaterTemperature);
         energyContentVolume->publish_state(meterReadings->energyContentVolume);
         energyFlowRate->publish_state(meterReadings->energyFlowRate);
+        meterId->publish_state(meterReadings->meterId);
     }
 
 void readMeterData() {
