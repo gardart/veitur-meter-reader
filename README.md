@@ -1,6 +1,9 @@
 # veitur-meter-reader
 Les snjallmæla frá Veitum, bæði rafmagn og hita með því að sækja gögn frá P1 tenginu
 
+![2024-05-03 20_11_18-Window](https://github.com/gardart/veitur-meter-reader/assets/3597603/de05083c-1bee-4c96-baef-34a02bf7cb2e)
+
+
 ```shell
 git clone https://github.com/gardart/veitur-meter-reader.git
 esphome run veitur-meter-reader.yaml
