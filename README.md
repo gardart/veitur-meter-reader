@@ -68,3 +68,27 @@ esphome run veitur-meter-reader.yaml
 [21:13:10][D][sensor:093]: 'Energy Content Volume': Sending state 0.00000 kWh with 3 decimals of accuracy
 [21:13:10][D][sensor:093]: 'Energy Flow Rate': Sending state 0.00000 kW with 3 decimals of accuracy
 ```
+
+### Dæmi um hrá gögn frá mælinum með hitaveitumælinn tengdan sem undirmælir
+```
+/ISk5\2MIE5E-200
+0-0:96.1.0(86818123)
+0-0:96.1.1(36303836383138373123)
+1-0:0.9.1(222114)
+1-0:0.9.2(240212)
+1-0:1.7.0(00.588*kW)* ()
+1-0:2.7.0(00.000*kW)
+1-0:31.7.0(002*A)
+1-0:32.7.0(232.5*V)
+1-0:1.8.0(001988.284*kWh)
+1-0:2.8.0(000000.000*kWh)
+1-0:21.7.0(00.583*kW)
+1-0:22.7.0(00.000*kW)
+0-1:24.2.1(0366.475*m3)
+0-1:24.2.10(0000000)
+0-1:24.2.2(0000.090*m3/h)
+0-1:24.2.3(000074.8*degC)
+0-1:24.2.4(000031.3*degC)
+0-1:24.2.5(0019.078*Wh)
+0-1:24.2.6(0019.078*Wh)
+```
