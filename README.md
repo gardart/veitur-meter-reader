@@ -3,6 +3,7 @@ Les snjallmæla frá Veitum, bæði rafmagn og hita með því að sækja gögn 
 
 ![2024-05-03 20_11_18-Window](https://github.com/gardart/veitur-meter-reader/assets/3597603/de05083c-1bee-4c96-baef-34a02bf7cb2e)
 
+![2024-05-03 20_05_25-Window](https://github.com/gardart/veitur-meter-reader/assets/3597603/11e9a3a8-2fb3-491b-9b01-b9d41aa8573b)
 
 ```shell
 git clone https://github.com/gardart/veitur-meter-reader.git
