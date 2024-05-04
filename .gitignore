@@ -2,6 +2,7 @@ secrets.yaml
 test.yaml
 veitur-meter-reader.yaml
 .esphome
+meters
 
 # Prerequisites
 *.d
