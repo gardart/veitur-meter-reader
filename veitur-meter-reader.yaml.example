@@ -66,16 +66,36 @@ uart:
   stop_bits: 1
 
 sensor:
+- platform: uptime
+  name: "Uptime"
+- platform: wifi_signal
+  name: "Wi-Fi Signal"
+  update_interval: 60s
 - platform: custom
   lambda: |-
     auto meter_sensor = new MeterReader(id(uart_bus));
     App.register_component(meter_sensor);
     return {
       meter_sensor->cumulativeActiveImport,
+      meter_sensor->cumulativeActiveExport,
+      meter_sensor->cumulativeReactiveImport,
+      meter_sensor->cumulativeReactiveExport,
       meter_sensor->momentaryActiveImport,
+      meter_sensor->momentaryActiveExport,
+      meter_sensor->momentaryReactiveImport,
+      meter_sensor->momentaryReactiveExport,
       meter_sensor->momentaryActiveImportL1,
+      meter_sensor->momentaryActiveExportL1,
       meter_sensor->momentaryActiveImportL2,
+      meter_sensor->momentaryActiveExportL2,
       meter_sensor->momentaryActiveImportL3,
+      meter_sensor->momentaryActiveExportL3,
+      meter_sensor->momentaryReactiveImportL1,
+      meter_sensor->momentaryReactiveExportL1,
+      meter_sensor->momentaryReactiveImportL2,
+      meter_sensor->momentaryReactiveExportL2,
+      meter_sensor->momentaryReactiveImportL3,
+      meter_sensor->momentaryReactiveExportL3,
       meter_sensor->voltageL1,
       meter_sensor->voltageL2,
       meter_sensor->voltageL3,
@@ -96,12 +116,39 @@ sensor:
     accuracy_decimals: 3
     state_class: "total_increasing"
     device_class: "energy"
+  - name: "Cumulative Active Export"
+    unit_of_measurement: kWh
+    accuracy_decimals: 3
+    state_class: "total_increasing"
+    device_class: "energy"
+  - name: "Cumulative Reactive Import"
+    unit_of_measurement: kvarh
+    accuracy_decimals: 3
+  - name: "Cumulative Reactive Export"
+    unit_of_measurement: kvarh
+    accuracy_decimals: 3
   - name: "Momentary Active Import"
     unit_of_measurement: kW
     accuracy_decimals: 3
     state_class: "measurement"
     device_class: "power"
+  - name: "Momentary Active Export"
+    unit_of_measurement: kW
+    accuracy_decimals: 3
+    state_class: "measurement"
+    device_class: "power"
+  - name: "Momentary Reactive Import"
+    unit_of_measurement: kvar
+    accuracy_decimals: 3
+  - name: "Momentary Reactive Export"
+    unit_of_measurement: kvar
+    accuracy_decimals: 3
   - name: "Momentary Active Import Phase 1"
+    unit_of_measurement: kW
+    accuracy_decimals: 3
+    state_class: "measurement"
+    device_class: "power"
+  - name: "Momentary Active Export Phase 1"
     unit_of_measurement: kW
     accuracy_decimals: 3
     state_class: "measurement"
@@ -111,11 +158,39 @@ sensor:
     accuracy_decimals: 3
     state_class: "measurement"
     device_class: "power"
+  - name: "Momentary Active Export Phase 2"
+    unit_of_measurement: kW
+    accuracy_decimals: 3
+    state_class: "measurement"
+    device_class: "power"
   - name: "Momentary Active Import Phase 3"
     unit_of_measurement: kW
     accuracy_decimals: 3
     state_class: "measurement"
     device_class: "power"
+  - name: "Momentary Active Export Phase 3"
+    unit_of_measurement: kW
+    accuracy_decimals: 3
+    state_class: "measurement"
+    device_class: "power"
+  - name: "Momentary Reactive Import Phase 1"
+    unit_of_measurement: kvar
+    accuracy_decimals: 3
+  - name: "Momentary Reactive Export Phase 1"
+    unit_of_measurement: kvar
+    accuracy_decimals: 3
+  - name: "Momentary Reactive Import Phase 2"
+    unit_of_measurement: kvar
+    accuracy_decimals: 3
+  - name: "Momentary Reactive Export Phase 2"
+    unit_of_measurement: kvar
+    accuracy_decimals: 3
+  - name: "Momentary Reactive Import Phase 3"
+    unit_of_measurement: kvar
+    accuracy_decimals: 3
+  - name: "Momentary Reactive Export Phase 3"
+    unit_of_measurement: kvar
+    accuracy_decimals: 3
   - name: "Voltage Phase 1"
     unit_of_measurement: V
     accuracy_decimals: 3
@@ -172,3 +247,15 @@ sensor:
     accuracy_decimals: 3
     state_class: "measurement"
   - name: "Meter ID"
+
+text_sensor:
+  - platform: wifi_info
+    ip_address:
+      name: "IP Address"
+    ssid:
+      name: "Wi-Fi SSID"
+    bssid:
+      name: "Wi-Fi BSSID"
+  - platform: version
+    name: "ESPHome Version"
+    hide_timestamp: false
