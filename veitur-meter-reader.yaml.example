@@ -256,6 +256,8 @@ text_sensor:
       name: "Wi-Fi SSID"
     bssid:
       name: "Wi-Fi BSSID"
+    mac_address:
+      name: Mac Address
   - platform: version
     name: "ESPHome Version"
     hide_timestamp: false
