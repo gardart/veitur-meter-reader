@@ -1,5 +1,5 @@
 substitutions:
-  name: "veitur-meter-reader"
+  name: "veitur-meter"
 
 esphome:
   name: "${name}"
@@ -10,7 +10,7 @@ esphome:
   name_add_mac_suffix: true
 
   project:
-    name: esphome.${name}"
+    name: "esphome.${name}"
     version: "1.0"
 
 esp8266:
