@@ -96,3 +96,11 @@ esphome run veitur-meter-reader.yaml
 0-1:24.2.5(0019.078*Wh)
 0-1:24.2.6(0019.078*Wh)
 ```
+
+# Fleiri myndir úr Home Assistant
+
+![2024-05-05 20_39_02-Stillingar – Home Assistant — Mozilla Firefox](https://github.com/gardart/veitur-meter-reader/assets/3597603/d5a82353-ed8e-4260-8cc2-3ee4671050d7)
+![2024-05-05 20_40_03-Stillingar – Home Assistant — Mozilla Firefox](https://github.com/gardart/veitur-meter-reader/assets/3597603/893d6719-a354-489a-a428-cb6a5490615e)
+![2024-05-05 20_40_34-Stillingar – Home Assistant — Mozilla Firefox](https://github.com/gardart/veitur-meter-reader/assets/3597603/abb68a91-36eb-45f8-bbd5-2639a7b8075f)
+![2024-05-05 20_40_55-Stillingar – Home Assistant — Mozilla Firefox](https://github.com/gardart/veitur-meter-reader/assets/3597603/f0b305c1-6d7c-41f8-951d-ae2c305df011)
+![2024-05-05 20_41_25-Stillingar – Home Assistant — Mozilla Firefox](https://github.com/gardart/veitur-meter-reader/assets/3597603/3d98d6e9-c1a3-4ac3-8c7d-c0e68adc0203)
