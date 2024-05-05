@@ -1,4 +1,6 @@
-Les snjallmæla frá Veitum, bæði rafmagn og hita með því að sækja gögn frá P1 tenginu
+# Veitur-Meter-Reader
+Þessi kóði er ætlaður fyrir ESPHOME og les snjallmæla frá Veitum, bæði rafmagn og hita með því að sækja gögn frá P1 tenginu.
+Kóðinn er að mestu byggður á esphome-p1reader en það var ekki stuðningur við hitaveitumælinn og tékksummu tékkið (crc) var ekki að virka rétt. Ég tók því út crc og breytti því einnig hvernig OBIS kóðinn er lesinn svo einfaldara væri að bæta inn nýjum OBIS. Búnaðurinn, rafrásin, sem les frá P1 tenginu er svipaður því sem er hjá esphome-p1reader.
 
 ![2024-05-03 20_11_18-Window](https://github.com/gardart/veitur-meter-reader/assets/3597603/de05083c-1bee-4c96-baef-34a02bf7cb2e)
 
