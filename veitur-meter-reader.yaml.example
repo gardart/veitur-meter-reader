@@ -230,19 +230,19 @@ sensor:
     unit_of_measurement: m³/h
     accuracy_decimals: 3
     state_class: "measurement"
-  - name: "Inlet Water Temperature"
+  - name: "Hot Water Inlet Temperature"
     unit_of_measurement: °C
     accuracy_decimals: 1
     state_class: "measurement"
-  - name: "Outlet Water Temperature"
+  - name: "Hot Water Outlet Temperature"
     unit_of_measurement: °C
     accuracy_decimals: 1
     state_class: "measurement"
-  - name: "Energy Content Volume"
+  - name: "Hot Water Energy Content Volume"
     unit_of_measurement: kWh
     accuracy_decimals: 3
     state_class: "measurement"
-  - name: "Energy Flow Rate"
+  - name: "Hot Water Energy Flow Rate"
     unit_of_measurement: kW
     accuracy_decimals: 3
     state_class: "measurement"
