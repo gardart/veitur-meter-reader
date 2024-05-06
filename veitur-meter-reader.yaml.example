@@ -3,6 +3,8 @@ substitutions:
 
 esphome:
   name: "${name}"
+  # Use friendly name for sensor prefixes
+  friendly_name: "${name}"
   includes:
     - veitur-meter-reader.h
 
