@@ -4,8 +4,8 @@ Home Assistant er með ESPHOME intergration og því auðvelt að bæta lesaranu
 
 Kóðinn er að mestu byggður á esphome-p1reader en það var ekki stuðningur við hitaveitumælinn og tékksummu tékkið (crc) var ekki að virka rétt. Ég tók því út crc og breytti því einnig hvernig OBIS kóðinn er lesinn svo einfaldara væri að bæta inn nýjum OBIS. Búnaðurinn, rafrásin, sem les frá P1 tenginu er svipaður því sem er hjá esphome-p1reader og einnig er hægt að nota SlimmeLezer+ dongle.
 
-![2024-05-03 20_11_18-Window](https://github.com/gardart/veitur-meter-reader/assets/3597603/de05083c-1bee-4c96-baef-34a02bf7cb2e)
-
+![2024-05-06 19_00_32-Stillingar – Home Assistant — Mozilla Firefox](https://github.com/gardart/veitur-meter-reader/assets/3597603/e614d056-9495-4b05-a78d-5e2ff0081a92)
+![2024-05-06 18_56_26-Stillingar – Home Assistant — Mozilla Firefox](https://github.com/gardart/veitur-meter-reader/assets/3597603/703e81e8-101b-4de5-b64b-cf1c2da8bab4)
 ![2024-05-03 20_05_25-Window](https://github.com/gardart/veitur-meter-reader/assets/3597603/11e9a3a8-2fb3-491b-9b01-b9d41aa8573b)
 
 # Uppsetning
