@@ -108,3 +108,13 @@ esphome run veitur-meter-reader.yaml
 ![2024-05-05 20_40_34-Stillingar – Home Assistant — Mozilla Firefox](https://github.com/gardart/veitur-meter-reader/assets/3597603/abb68a91-36eb-45f8-bbd5-2639a7b8075f)
 ![2024-05-05 20_40_55-Stillingar – Home Assistant — Mozilla Firefox](https://github.com/gardart/veitur-meter-reader/assets/3597603/f0b305c1-6d7c-41f8-951d-ae2c305df011)
 ![2024-05-05 20_41_25-Stillingar – Home Assistant — Mozilla Firefox](https://github.com/gardart/veitur-meter-reader/assets/3597603/3d98d6e9-c1a3-4ac3-8c7d-c0e68adc0203)
+
+# Fjarlægja request rofann úr breytingaferlinum (logbook)
+Þar sem rofinn fer í gang á 5 sek fresti þá tekur það mikið pláss í breytingarferlinum (logbook). Hægt að fjarlægja með því að setja inn skilgreiningu fyrir recorder í configuration.yaml
+
+```yaml
+recorder:
+  exclude:
+    entity_globs:
+      - switch.veitur_meter_*
+```
