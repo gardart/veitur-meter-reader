@@ -118,136 +118,200 @@ sensor:
     accuracy_decimals: 3
     state_class: "total_increasing"
     device_class: "energy"
+    filters:
+      - filter_out: nan
   - name: "Cumulative Active Export"
     unit_of_measurement: kWh
     accuracy_decimals: 3
     state_class: "total_increasing"
     device_class: "energy"
+    filters:
+      - filter_out: nan
   - name: "Cumulative Reactive Import"
     unit_of_measurement: kvarh
     accuracy_decimals: 3
+    filters:
+      - filter_out: nan
   - name: "Cumulative Reactive Export"
     unit_of_measurement: kvarh
     accuracy_decimals: 3
+    filters:
+      - filter_out: nan
   - name: "Momentary Active Import"
     unit_of_measurement: kW
     accuracy_decimals: 3
     state_class: "measurement"
     device_class: "power"
+    filters:
+      - filter_out: nan
   - name: "Momentary Active Export"
     unit_of_measurement: kW
     accuracy_decimals: 3
     state_class: "measurement"
     device_class: "power"
+    filters:
+      - filter_out: nan
   - name: "Momentary Reactive Import"
     unit_of_measurement: kvar
     accuracy_decimals: 3
+    filters:
+      - filter_out: nan
   - name: "Momentary Reactive Export"
     unit_of_measurement: kvar
     accuracy_decimals: 3
+    filters:
+      - filter_out: nan
   - name: "Momentary Active Import Phase 1"
     unit_of_measurement: kW
     accuracy_decimals: 3
     state_class: "measurement"
     device_class: "power"
+    filters:
+      - filter_out: nan
   - name: "Momentary Active Export Phase 1"
     unit_of_measurement: kW
     accuracy_decimals: 3
     state_class: "measurement"
     device_class: "power"
+    filters:
+      - filter_out: nan
   - name: "Momentary Active Import Phase 2"
     unit_of_measurement: kW
     accuracy_decimals: 3
     state_class: "measurement"
     device_class: "power"
+    filters:
+      - filter_out: nan
   - name: "Momentary Active Export Phase 2"
     unit_of_measurement: kW
     accuracy_decimals: 3
     state_class: "measurement"
     device_class: "power"
+    filters:
+      - filter_out: nan
   - name: "Momentary Active Import Phase 3"
     unit_of_measurement: kW
     accuracy_decimals: 3
     state_class: "measurement"
     device_class: "power"
+    filters:
+      - filter_out: nan
   - name: "Momentary Active Export Phase 3"
     unit_of_measurement: kW
     accuracy_decimals: 3
     state_class: "measurement"
     device_class: "power"
+    filters:
+      - filter_out: nan
   - name: "Momentary Reactive Import Phase 1"
     unit_of_measurement: kvar
     accuracy_decimals: 3
+    filters:
+      - filter_out: nan
   - name: "Momentary Reactive Export Phase 1"
     unit_of_measurement: kvar
     accuracy_decimals: 3
+    filters:
+      - filter_out: nan
   - name: "Momentary Reactive Import Phase 2"
     unit_of_measurement: kvar
     accuracy_decimals: 3
+    filters:
+      - filter_out: nan
   - name: "Momentary Reactive Export Phase 2"
     unit_of_measurement: kvar
     accuracy_decimals: 3
+    filters:
+      - filter_out: nan
   - name: "Momentary Reactive Import Phase 3"
     unit_of_measurement: kvar
     accuracy_decimals: 3
+    filters:
+      - filter_out: nan
   - name: "Momentary Reactive Export Phase 3"
     unit_of_measurement: kvar
     accuracy_decimals: 3
+    filters:
+      - filter_out: nan
   - name: "Voltage Phase 1"
     unit_of_measurement: V
     accuracy_decimals: 3
     state_class: "measurement"
     device_class: "voltage"
+    filters:
+      - filter_out: nan
   - name: "Voltage Phase 2"
     unit_of_measurement: V
     accuracy_decimals: 3
     state_class: "measurement"
     device_class: "voltage"
+    filters:
+      - filter_out: nan
   - name: "Voltage Phase 3"
     unit_of_measurement: V
     accuracy_decimals: 3
     state_class: "measurement"
     device_class: "voltage"
+    filters:
+      - filter_out: nan
   - name: "Current Phase 1"
     unit_of_measurement: A
     accuracy_decimals: 3
     state_class: "measurement"
     device_class: "current"
+    filters:
+      - filter_out: nan
   - name: "Current Phase 2"
     unit_of_measurement: A
     accuracy_decimals: 3
     state_class: "measurement"
     device_class: "current"
+    filters:
+      - filter_out: nan
   - name: "Current Phase 3"
     unit_of_measurement: A
     accuracy_decimals: 3
     state_class: "measurement"
     device_class: "current"
+    filters:
+      - filter_out: nan
   - name: "Hot Water Volume"
     unit_of_measurement: m³
     accuracy_decimals: 3
     state_class: "total_increasing"
     device_class: "water"
+    filters:
+      - filter_out: nan
   - name: "Hot Water Flow Rate"
     unit_of_measurement: m³/h
     accuracy_decimals: 3
     state_class: "measurement"
+    filters:
+      - filter_out: nan
   - name: "Hot Water Inlet Temperature"
     unit_of_measurement: °C
     accuracy_decimals: 1
     state_class: "measurement"
+    filters:
+      - filter_out: nan
   - name: "Hot Water Outlet Temperature"
     unit_of_measurement: °C
     accuracy_decimals: 1
     state_class: "measurement"
+    filters:
+      - filter_out: nan
   - name: "Hot Water Energy Content Volume"
     unit_of_measurement: kWh
     accuracy_decimals: 3
     state_class: "measurement"
+    filters:
+      - filter_out: nan
   - name: "Hot Water Energy Flow Rate"
     unit_of_measurement: kW
     accuracy_decimals: 3
     state_class: "measurement"
+    filters:
+      - filter_out: nan
   - name: "Meter ID"
 
 text_sensor:
