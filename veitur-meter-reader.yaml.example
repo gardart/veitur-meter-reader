@@ -50,6 +50,9 @@ switch:
     name: "P1 Request Trigger"
     pin: D5
     id: p1_request
+  - platform: restart
+    name: "Restart device"
+
 # Request data every 10s
 interval:
   - interval: 10s
