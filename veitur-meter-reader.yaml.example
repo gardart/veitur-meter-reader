@@ -17,6 +17,7 @@ esphome:
 
 esp8266:
   board: d1
+  restore_from_flash: True
 
 # API is a requirement of the dashboard import.
 api:
