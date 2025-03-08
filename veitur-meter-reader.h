@@ -352,7 +352,7 @@ void readMeterData() {
 
             if (!telegramEnded && !available()) {
             // Wait for more data
-                delay(10);
+                delay(4);
             }
         }
 
