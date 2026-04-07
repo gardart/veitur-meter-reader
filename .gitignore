@@ -36,3 +36,10 @@ meters
 *.exe
 *.out
 *.app
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Archived legacy files
+old/
