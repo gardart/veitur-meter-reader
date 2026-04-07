@@ -36,3 +36,7 @@ meters
 *.exe
 *.out
 *.app
+
+# Python cache
+__pycache__/
+*.pyc
