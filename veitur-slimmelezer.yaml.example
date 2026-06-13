@@ -1,0 +1,340 @@
+# mininum ESPHome Version: 2025.2.1
+substitutions:
+  name: "slimmelezer"
+
+esphome:
+  name: "${name}"
+  # Use friendly name for sensor prefixes
+  friendly_name: "${name}"
+
+  # Automatically add the mac address to the name
+  name_add_mac_suffix: false
+
+  project:
+    name: "esphome.${name}"
+    version: "1.0"
+
+esp8266:
+  board: d1_mini
+  restore_from_flash: True
+
+# API is a requirement of the dashboard import.
+api:
+
+# OTA is required for Over-the-Air updating
+ota:
+  platform: esphome
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+  fast_connect: True
+  reboot_timeout: 5min
+  domain: .local
+  # Optional static IP
+  #  manual_ip:
+  #    static_ip: !secret wifi_ipaddress
+  #    gateway: !secret wifi_gateway
+  #    subnet: !secret wifi_subnet
+  ap:
+    ssid: "${name}"
+    password: "123456789"
+
+# Use git external   component
+external_components:
+  - source:
+      type: git
+      url: https://github.com/gardart/veitur-meter-reader.git
+      ref: main # Or a specific tag or branch
+
+captive_portal:
+
+# Enable logging
+logger:
+  level: DEBUG # or INFO
+  baud_rate: 0 # disable logging over uart
+  esp8266_store_log_strings_in_flash: false # Avoid flash wear and tear
+
+# Create a switch to trigger P1 data request from meter
+switch:
+  - platform: gpio
+    name: "P1 Request Trigger"
+    pin: D5
+    id: p1_request
+  - platform: restart
+    name: "Restart device"
+
+# Request data every 10s
+interval:
+  - interval: 10s
+    then:
+      - switch.turn_on: p1_request
+      - delay: 50ms
+      - switch.turn_off: p1_request
+
+uart:
+  id: uart_bus
+  # tx_pin: GPIO15
+  rx_pin: D7
+  rx_buffer_size: 3072
+  baud_rate: 9600
+  data_bits: 7
+  parity: EVEN
+  stop_bits: 1
+
+sensor:
+  - platform: uptime
+    name: "Uptime"
+  - platform: wifi_signal
+    name: "Wi-Fi Signal"
+    update_interval: 60s
+  - platform: veitur_meter
+    id: meter_sensor
+    uart_id: uart_bus
+    cumulative_active_import:
+      name: "Cumulative Active Import"
+      unit_of_measurement: kWh
+      accuracy_decimals: 3
+      state_class: "total_increasing"
+      device_class: "energy"
+      filters:
+        - filter_out: nan
+    cumulative_active_export:
+      name: "Cumulative Active Export"
+      unit_of_measurement: kWh
+      accuracy_decimals: 3
+      state_class: "total_increasing"
+      device_class: "energy"
+      filters:
+        - filter_out: nan
+    cumulative_reactive_import:
+      name: "Cumulative Reactive Import"
+      unit_of_measurement: kvarh
+      accuracy_decimals: 3
+      filters:
+        - filter_out: nan
+    cumulative_reactive_export:
+      name: "Cumulative Reactive Export"
+      unit_of_measurement: kvarh
+      accuracy_decimals: 3
+      filters:
+        - filter_out: nan
+    momentary_active_import:
+      name: "Momentary Active Import"
+      unit_of_measurement: kW
+      accuracy_decimals: 3
+      state_class: "measurement"
+      device_class: "power"
+      filters:
+        - filter_out: nan
+    momentary_active_export:
+      name: "Momentary Active Export"
+      unit_of_measurement: kW
+      accuracy_decimals: 3
+      state_class: "measurement"
+      device_class: "power"
+      filters:
+        - filter_out: nan
+    momentary_reactive_import:
+      name: "Momentary Reactive Import"
+      unit_of_measurement: kvar
+      accuracy_decimals: 3
+      filters:
+        - filter_out: nan
+    momentary_reactive_export:
+      name: "Momentary Reactive Export"
+      unit_of_measurement: kvar
+      accuracy_decimals: 3
+      filters:
+        - filter_out: nan
+    momentary_active_import_l1:
+      name: "Momentary Active Import Phase 1"
+      unit_of_measurement: kW
+      accuracy_decimals: 3
+      state_class: "measurement"
+      device_class: "power"
+      filters:
+        - filter_out: nan
+    momentary_active_export_l1:
+      name: "Momentary Active Export Phase 1"
+      unit_of_measurement: kW
+      accuracy_decimals: 3
+      state_class: "measurement"
+      device_class: "power"
+      filters:
+        - filter_out: nan
+    momentary_active_import_l2:
+      name: "Momentary Active Import Phase 2"
+      unit_of_measurement: kW
+      accuracy_decimals: 3
+      state_class: "measurement"
+      device_class: "power"
+      filters:
+        - filter_out: nan
+    momentary_active_export_l2:
+      name: "Momentary Active Export Phase 2"
+      unit_of_measurement: kW
+      accuracy_decimals: 3
+      state_class: "measurement"
+      device_class: "power"
+      filters:
+        - filter_out: nan
+    momentary_active_import_l3:
+      name: "Momentary Active Import Phase 3"
+      unit_of_measurement: kW
+      accuracy_decimals: 3
+      state_class: "measurement"
+      device_class: "power"
+      filters:
+        - filter_out: nan
+    momentary_active_export_l3:
+      name: "Momentary Active Export Phase 3"
+      unit_of_measurement: kW
+      accuracy_decimals: 3
+      state_class: "measurement"
+      device_class: "power"
+      filters:
+        - filter_out: nan
+    momentary_reactive_import_l1:
+      name: "Momentary Reactive Import Phase 1"
+      unit_of_measurement: kvar
+      accuracy_decimals: 3
+      filters:
+        - filter_out: nan
+    momentary_reactive_export_l1:
+      name: "Momentary Reactive Export Phase 1"
+      unit_of_measurement: kvar
+      accuracy_decimals: 3
+      filters:
+        - filter_out: nan
+    momentary_reactive_import_l2:
+      name: "Momentary Reactive Import Phase 2"
+      unit_of_measurement: kvar
+      accuracy_decimals: 3
+      filters:
+        - filter_out: nan
+    momentary_reactive_export_l2:
+      name: "Momentary Reactive Export Phase 2"
+      unit_of_measurement: kvar
+      accuracy_decimals: 3
+      filters:
+        - filter_out: nan
+    momentary_reactive_import_l3:
+      name: "Momentary Reactive Import Phase 3"
+      unit_of_measurement: kvar
+      accuracy_decimals: 3
+      filters:
+        - filter_out: nan
+    momentary_reactive_export_l3:
+      name: "Momentary Reactive Export Phase 3"
+      unit_of_measurement: kvar
+      accuracy_decimals: 3
+      filters:
+        - filter_out: nan
+    voltage_l1:
+      name: "Voltage Phase 1"
+      unit_of_measurement: V
+      accuracy_decimals: 3
+      state_class: "measurement"
+      device_class: "voltage"
+      filters:
+        - filter_out: nan
+    voltage_l2:
+      name: "Voltage Phase 2"
+      unit_of_measurement: V
+      accuracy_decimals: 3
+      state_class: "measurement"
+      device_class: "voltage"
+      filters:
+        - filter_out: nan
+    voltage_l3:
+      name: "Voltage Phase 3"
+      unit_of_measurement: V
+      accuracy_decimals: 3
+      state_class: "measurement"
+      device_class: "voltage"
+      filters:
+        - filter_out: nan
+    current_l1:
+      name: "Current Phase 1"
+      unit_of_measurement: A
+      accuracy_decimals: 3
+      state_class: "measurement"
+      device_class: "current"
+      filters:
+        - filter_out: nan
+    current_l2:
+      name: "Current Phase 2"
+      unit_of_measurement: A
+      accuracy_decimals: 3
+      state_class: "measurement"
+      device_class: "current"
+      filters:
+        - filter_out: nan
+    current_l3:
+      name: "Current Phase 3"
+      unit_of_measurement: A
+      accuracy_decimals: 3
+      state_class: "measurement"
+      device_class: "current"
+      filters:
+        - filter_out: nan
+    hot_water_volume:
+      name: "Hot Water Volume"
+      unit_of_measurement: m³
+      accuracy_decimals: 3
+      state_class: "total_increasing"
+      device_class: "water"
+      filters:
+        - filter_out: nan
+    hot_water_flow_rate:
+      name: "Hot Water Flow Rate"
+      unit_of_measurement: m³/h
+      accuracy_decimals: 3
+      state_class: "measurement"
+      filters:
+        - filter_out: nan
+    inlet_water_temperature:
+      name: "Hot Water Inlet Temperature"
+      unit_of_measurement: °C
+      accuracy_decimals: 1
+      state_class: "measurement"
+      filters:
+        - filter_out: nan
+    outlet_water_temperature:
+      name: "Hot Water Outlet Temperature"
+      unit_of_measurement: °C
+      accuracy_decimals: 1
+      state_class: "measurement"
+      filters:
+        - filter_out: nan
+    energy_content_volume:
+      name: "Hot Water Energy Content Volume"
+      unit_of_measurement: kWh
+      accuracy_decimals: 3
+      state_class: "measurement"
+      filters:
+        - filter_out: nan
+    energy_flow_rate:
+      name: "Hot Water Energy Flow Rate"
+      unit_of_measurement: kW
+      accuracy_decimals: 3
+      state_class: "measurement"
+      filters:
+        - filter_out: nan
+    meter_id:
+      name: "Meter ID"
+
+text_sensor:
+  - platform: wifi_info
+    ip_address:
+      name: "IP Address"
+    ssid:
+      name: "Wi-Fi SSID"
+    bssid:
+      name: "Wi-Fi BSSID"
+    mac_address:
+      name: Mac Address
+  - platform: version
+    name: "ESPHome Version"
+    hide_timestamp: false
