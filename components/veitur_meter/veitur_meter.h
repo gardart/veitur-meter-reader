@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cmath>
+#include <cstddef>
 #include <cstdint>
 
 #include "esphome/components/sensor/sensor.h"
@@ -53,51 +55,53 @@ class VeiturMeter : public Component, public uart::UARTDevice {
 
  protected:
   struct MeterReadings {
-    float cumulative_active_import = 0.0f;
-    float cumulative_active_export = 0.0f;
-    float cumulative_reactive_import = 0.0f;
-    float cumulative_reactive_export = 0.0f;
-    float momentary_active_import = 0.0f;
-    float momentary_active_export = 0.0f;
-    float momentary_reactive_import = 0.0f;
-    float momentary_reactive_export = 0.0f;
-    float momentary_active_import_l1 = 0.0f;
-    float momentary_active_export_l1 = 0.0f;
-    float momentary_active_import_l2 = 0.0f;
-    float momentary_active_export_l2 = 0.0f;
-    float momentary_active_import_l3 = 0.0f;
-    float momentary_active_export_l3 = 0.0f;
-    float momentary_reactive_import_l1 = 0.0f;
-    float momentary_reactive_export_l1 = 0.0f;
-    float momentary_reactive_import_l2 = 0.0f;
-    float momentary_reactive_export_l2 = 0.0f;
-    float momentary_reactive_import_l3 = 0.0f;
-    float momentary_reactive_export_l3 = 0.0f;
-    float voltage_l1 = 0.0f;
-    float voltage_l2 = 0.0f;
-    float voltage_l3 = 0.0f;
-    float current_l1 = 0.0f;
-    float current_l2 = 0.0f;
-    float current_l3 = 0.0f;
-    float hot_water_volume = 0.0f;
-    float hot_water_flow_rate = 0.0f;
-    float inlet_water_temperature = 0.0f;
-    float outlet_water_temperature = 0.0f;
-    float energy_content_volume = 0.0f;
-    float energy_flow_rate = 0.0f;
-    float meter_id = 0.0f;
+    float cumulative_active_import = NAN;
+    float cumulative_active_export = NAN;
+    float cumulative_reactive_import = NAN;
+    float cumulative_reactive_export = NAN;
+    float momentary_active_import = NAN;
+    float momentary_active_export = NAN;
+    float momentary_reactive_import = NAN;
+    float momentary_reactive_export = NAN;
+    float momentary_active_import_l1 = NAN;
+    float momentary_active_export_l1 = NAN;
+    float momentary_active_import_l2 = NAN;
+    float momentary_active_export_l2 = NAN;
+    float momentary_active_import_l3 = NAN;
+    float momentary_active_export_l3 = NAN;
+    float momentary_reactive_import_l1 = NAN;
+    float momentary_reactive_export_l1 = NAN;
+    float momentary_reactive_import_l2 = NAN;
+    float momentary_reactive_export_l2 = NAN;
+    float momentary_reactive_import_l3 = NAN;
+    float momentary_reactive_export_l3 = NAN;
+    float voltage_l1 = NAN;
+    float voltage_l2 = NAN;
+    float voltage_l3 = NAN;
+    float current_l1 = NAN;
+    float current_l2 = NAN;
+    float current_l3 = NAN;
+    float hot_water_volume = NAN;
+    float hot_water_flow_rate = NAN;
+    float inlet_water_temperature = NAN;
+    float outlet_water_temperature = NAN;
+    float energy_content_volume = NAN;
+    float energy_flow_rate = NAN;
+    float meter_id = NAN;
   };
 
   void reset_buffer_();
   void process_buffer_();
-  void decode_meter_line_(char *data_id, char *obis_code, char *value);
+  bool extract_code_and_value_(const char *line, char *full_code, size_t full_code_size, char *value,
+                               size_t value_size, bool *has_unit);
+  void decode_meter_line_(const char *full_code, const char *value, const char *line);
   void publish_readings_();
   void publish_sensor_(sensor::Sensor *target, float value);
 
-  static const int BUFFER_SIZE = 64;
-  const char *delimiters_ = "()*:";
+  static const int BUFFER_SIZE = 256;
   char line_buffer_[BUFFER_SIZE];
   int buffer_pos_{0};
+  bool discarding_line_{false};
   MeterReadings readings_;
 
   sensor::Sensor *cumulative_active_import_sensor_{nullptr};

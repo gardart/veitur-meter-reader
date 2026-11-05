@@ -49,33 +49,24 @@ captive_portal:
 logger:
   level: DEBUG # or INFO
   baud_rate: 0 # disable logging over uart
-  esp8266_store_log_strings_in_flash: false # Avoid flash wear and tear
 
-# Create a switch to trigger P1 data request from meter
+# DSMR emits while the P1 request line is held high.
 switch:
   - platform: gpio
     name: "P1 Request Trigger"
     pin: D5
     id: p1_request
+    restore_mode: ALWAYS_ON
   - platform: restart
     name: "Restart device"
 
-# Request data every 10s
-interval:
-  - interval: 10s
-    then:
-      - switch.turn_on: p1_request
-      - delay: 50ms
-      - switch.turn_off: p1_request
-
 uart:
   id: uart_bus
-  tx_pin: GPIO15
   rx_pin: GPIO13
   rx_buffer_size: 3072
-  baud_rate: 9600
-  data_bits: 7
-  parity: EVEN
+  baud_rate: 115200
+  data_bits: 8
+  parity: NONE
   stop_bits: 1
 
 sensor:

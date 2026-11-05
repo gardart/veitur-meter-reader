@@ -2,6 +2,12 @@
 Þessi kóði er ætlaður fyrir ESPHOME og les snjallmæla frá Veitum, bæði rafmagn og hita með því að sækja gögn frá P1 tenginu.
 Home Assistant er með ESPHOME intergration og því auðvelt að bæta lesaranum þar inn eftir að hann hefur verið flassaður.
 
+## Núverandi Veitur DSMR stillingar
+
+Veitur sendir nú P1 gögn í DSMR ham á `115200` baud með `8N1` serial framing. P1 request-línan þarf að vera haldin HIGH; ekki nota eldri 50 ms DLMS request-púlsa. Dæmiskráin í repository-inu er uppfærð fyrir þessar stillingar.
+
+Nýja parser-útfærslan birtir aðeins OBIS-gildi sem raunverulega koma í telegraminu. Hún styður einnig hitaveituröð þar sem tímastimpill og mæligildi koma í sitt hvorri `24.2.x` röðinni, án þess að tímastimpillinn verði ranglega skráður sem vatnsnotkun.
+
 Kóðinn er að mestu byggður á esphome-p1reader en það var ekki stuðningur við hitaveitumælinn og tékksummu tékkið (crc) var ekki að virka rétt. Ég tók því út crc og breytti því einnig hvernig OBIS kóðinn er lesinn svo einfaldara væri að bæta inn nýjum OBIS. Búnaðurinn, rafrásin, sem les frá P1 tenginu er svipaður því sem er hjá esphome-p1reader og einnig er hægt að nota SlimmeLezer+ dongle.
 
 ![2024-05-06 19_00_32-Stillingar – Home Assistant — Mozilla Firefox](https://github.com/gardart/veitur-meter-reader/assets/3597603/e614d056-9495-4b05-a78d-5e2ff0081a92)
@@ -13,7 +19,9 @@ Kóðinn er að mestu byggður á esphome-p1reader en það var ekki stuðningur
 git clone https://github.com/gardart/veitur-meter-reader.git
 esphome run veitur-meter-reader.yaml
 ```
-Þegar búið er að tengja lesarann við p1 tengið á ISKRA mælinum þá ætti loggurinn að sýna þegar hann sendir boð um að sækja gögn og sömuleiðis gögnin (OBIS kóðana) sem mælirinn skilar. Hitaveitumælirinn (Sharky) er tengdur þráðlaust við ISKRA mælinn og sýnir hitaveitugögnin með OBIS forskeytinu 1-0. Hann birtir því sínar mælingar sem undirmælir við ISKRA. Ef engin hitaveitugögn birtast þarf mögulega að biðja Veitur um að virkja það.
+Þegar búið er að tengja lesarann við P1 tengið á ISKRA mælinum ætti loggurinn að sýna heilt DSMR telegram á um 10 sekúndna fresti. Hitaveitumælirinn (Sharky) er tengdur þráðlaust við ISKRA mælinn og birtir mælingar sínar sem undirmælir með OBIS forskeytinu `0-1`. Ef engar `24.2.x` raðir birtast þarf mögulega að biðja Veitur um að virkja hitaveitugögnin.
+
+Loggurinn hér að neðan er eldri DLMS/9600 sýnidæmi; sjá dæmiskrána fyrir núverandi DSMR stillingar.
 ```ruby
 [21:13:00][D][switch:016]: 'P1 Request Trigger' Turning OFF.
 [21:13:00][D][switch:055]: 'P1 Request Trigger': Sending state OFF
@@ -92,13 +100,12 @@ esphome run veitur-meter-reader.yaml
 1-0:2.8.0(000000.000*kWh)
 1-0:21.7.0(00.583*kW)
 1-0:22.7.0(00.000*kW)
+0-1:24.2.1(261105232818)
 0-1:24.2.1(0366.475*m3)
-0-1:24.2.10(0000000)
 0-1:24.2.2(0000.090*m3/h)
 0-1:24.2.3(000074.8*degC)
 0-1:24.2.4(000031.3*degC)
 0-1:24.2.5(0019.078*Wh)
-0-1:24.2.6(0019.078*Wh)
 ```
 
 # Fleiri myndir úr Home Assistant
