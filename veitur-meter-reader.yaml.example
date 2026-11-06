@@ -309,7 +309,7 @@ sensor:
     state_class: "measurement"
     filters:
       - filter_out: nan
-  meter_id:
+  meter_id_text:
     name: "Meter ID"
 
 text_sensor:

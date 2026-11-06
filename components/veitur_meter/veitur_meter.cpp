@@ -24,6 +24,10 @@ void VeiturMeter::loop() {
     if (!this->read_byte(&byte))
       break;
 
+    if (byte == '/' && this->buffer_pos_ == 0)
+      this->start_telegram_crc_();
+    this->track_crc_byte_(byte);
+
     if (byte == '\r')
       continue;
 
@@ -54,6 +58,58 @@ void VeiturMeter::loop() {
 void VeiturMeter::reset_buffer_() {
   this->buffer_pos_ = 0;
   std::memset(this->line_buffer_, 0, sizeof(this->line_buffer_));
+}
+
+uint16_t VeiturMeter::crc16_update_(uint16_t crc, uint8_t data) {
+  crc ^= data;
+  for (uint8_t bit = 0; bit < 8; bit++)
+    crc = (crc & 1U) != 0U ? (crc >> 1U) ^ 0xA001U : crc >> 1U;
+  return crc;
+}
+
+void VeiturMeter::start_telegram_crc_() {
+  this->telegram_crc_ = 0;
+  this->crc_active_ = true;
+  this->checksum_active_ = false;
+  this->checksum_pos_ = 0;
+  std::memset(this->checksum_, 0, sizeof(this->checksum_));
+}
+
+void VeiturMeter::track_crc_byte_(uint8_t byte) {
+  if (!this->crc_active_)
+    return;
+
+  if (this->checksum_active_) {
+    const bool is_hex = (byte >= '0' && byte <= '9') || (byte >= 'A' && byte <= 'F') ||
+                        (byte >= 'a' && byte <= 'f');
+    if (is_hex && this->checksum_pos_ < 4)
+      this->checksum_[this->checksum_pos_++] = static_cast<char>(byte);
+    return;
+  }
+
+  this->telegram_crc_ = this->crc16_update_(this->telegram_crc_, byte);
+  if (byte == '!')
+    this->checksum_active_ = true;
+}
+
+bool VeiturMeter::validate_telegram_crc_() {
+  const bool complete = this->crc_active_ && this->checksum_active_ && this->checksum_pos_ == 4;
+  uint16_t expected = 0;
+  if (complete)
+    expected = static_cast<uint16_t>(std::strtoul(this->checksum_, nullptr, 16));
+
+  const bool valid = complete && expected == this->telegram_crc_;
+  if (!valid) {
+    if (complete)
+      ESP_LOGW(TAG, "DSMR CRC mismatch: calculated %04X, received %04X", this->telegram_crc_, expected);
+    else
+      ESP_LOGW(TAG, "Incomplete DSMR CRC; discarding telegram");
+  }
+
+  this->crc_active_ = false;
+  this->checksum_active_ = false;
+  this->checksum_pos_ = 0;
+  return valid;
 }
 
 bool VeiturMeter::extract_code_and_value_(const char *line, char *full_code, size_t full_code_size, char *value,
@@ -115,7 +171,8 @@ void VeiturMeter::process_buffer_() {
   }
 
   if (this->line_buffer_[0] == '!') {
-    this->publish_readings_();
+    if (this->validate_telegram_crc_())
+      this->publish_readings_();
     this->reset_buffer_();
     return;
   }
@@ -148,6 +205,7 @@ void VeiturMeter::decode_meter_line_(const char *full_code, const char *value_te
   ESP_LOGD(TAG, "OBIS %s = %.6f", full_code, value);
 
   if (std::strcmp(full_code, "0-0:96.1.0") == 0 || std::strcmp(full_code, "0-0:96.1.1") == 0) {
+    std::snprintf(this->readings_.meter_id_text, sizeof(this->readings_.meter_id_text), "%s", value_text);
     this->readings_.meter_id = value;
   } else if (std::strcmp(full_code, "1-0:1.8.0") == 0) {
     this->readings_.cumulative_active_import = value;
@@ -260,6 +318,8 @@ void VeiturMeter::publish_readings_() {
   this->publish_sensor_(this->energy_content_volume_sensor_, this->readings_.energy_content_volume);
   this->publish_sensor_(this->energy_flow_rate_sensor_, this->readings_.energy_flow_rate);
   this->publish_sensor_(this->meter_id_sensor_, this->readings_.meter_id);
+  if (this->meter_id_text_sensor_ != nullptr && this->readings_.meter_id_text[0] != '\0')
+    this->meter_id_text_sensor_->publish_state(this->readings_.meter_id_text);
 }
 
 }  // namespace veitur_meter

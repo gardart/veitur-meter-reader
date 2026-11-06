@@ -1,6 +1,6 @@
 import esphome.codegen as cg
 import esphome.config_validation as cv
-from esphome.components import sensor, uart
+from esphome.components import sensor, text_sensor, uart
 from esphome.const import CONF_ID
 
 from . import veitur_meter_ns
@@ -38,6 +38,7 @@ CONF_OUTLET_WATER_TEMPERATURE = "outlet_water_temperature"
 CONF_ENERGY_CONTENT_VOLUME = "energy_content_volume"
 CONF_ENERGY_FLOW_RATE = "energy_flow_rate"
 CONF_METER_ID = "meter_id"
+CONF_METER_ID_TEXT = "meter_id_text"
 
 VeiturMeter = veitur_meter_ns.class_("VeiturMeter", cg.Component, uart.UARTDevice)
 
@@ -114,6 +115,7 @@ CONFIG_SCHEMA = (
             cv.Optional(CONF_ENERGY_CONTENT_VOLUME): sensor.sensor_schema(),
             cv.Optional(CONF_ENERGY_FLOW_RATE): sensor.sensor_schema(),
             cv.Optional(CONF_METER_ID): sensor.sensor_schema(),
+            cv.Optional(CONF_METER_ID_TEXT): text_sensor.text_sensor_schema(),
         }
     )
     .extend(cv.COMPONENT_SCHEMA)
@@ -130,3 +132,7 @@ async def to_code(config):
         if key in config:
             sens = await sensor.new_sensor(config[key])
             cg.add(getattr(var, f"set_{key}_sensor")(sens))
+
+    if CONF_METER_ID_TEXT in config:
+        meter_id_text = await text_sensor.new_text_sensor(config[CONF_METER_ID_TEXT])
+        cg.add(var.set_meter_id_text_sensor(meter_id_text))

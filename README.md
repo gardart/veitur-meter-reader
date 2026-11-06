@@ -6,9 +6,9 @@ Home Assistant er með ESPHOME intergration og því auðvelt að bæta lesaranu
 
 Veitur sendir nú P1 gögn í DSMR ham á `115200` baud með `8N1` serial framing. P1 request-línan þarf að vera haldin HIGH; ekki nota eldri 50 ms DLMS request-púlsa. Dæmiskráin í repository-inu er uppfærð fyrir þessar stillingar.
 
-Nýja parser-útfærslan birtir aðeins OBIS-gildi sem raunverulega koma í telegraminu. Hún styður einnig hitaveituröð þar sem tímastimpill og mæligildi koma í sitt hvorri `24.2.x` röðinni, án þess að tímastimpillinn verði ranglega skráður sem vatnsnotkun.
+Nýja parser-útfærslan birtir aðeins OBIS-gildi sem raunverulega koma í telegraminu. Hún styður einnig hitaveituröð þar sem tímastimpill og mæligildi koma í sitt hvorri `24.2.x` röðinni, án þess að tímastimpillinn verði ranglega skráður sem vatnsnotkun. Telegram er aðeins birt þegar DSMR CRC16 stenst, og mælanúmer er birt sem texti svo löng auðkenni tapi ekki nákvæmni.
 
-Kóðinn er að mestu byggður á esphome-p1reader en það var ekki stuðningur við hitaveitumælinn og tékksummu tékkið (crc) var ekki að virka rétt. Ég tók því út crc og breytti því einnig hvernig OBIS kóðinn er lesinn svo einfaldara væri að bæta inn nýjum OBIS. Búnaðurinn, rafrásin, sem les frá P1 tenginu er svipaður því sem er hjá esphome-p1reader og einnig er hægt að nota SlimmeLezer+ dongle.
+Kóðinn er að mestu byggður á esphome-p1reader en þar vantaði stuðning við hitaveitumælinn. OBIS lesturinn hefur verið aðlagaður að Veitur DSMR telegramum og CRC16 er staðfest áður en mælingar eru birtar. Búnaðurinn, rafrásin, sem les frá P1 tenginu er svipaður því sem er hjá esphome-p1reader og einnig er hægt að nota SlimmeLezer+ dongle.
 
 ![2024-05-06 19_00_32-Stillingar – Home Assistant — Mozilla Firefox](https://github.com/gardart/veitur-meter-reader/assets/3597603/e614d056-9495-4b05-a78d-5e2ff0081a92)
 ![2024-05-06 18_56_26-Stillingar – Home Assistant — Mozilla Firefox](https://github.com/gardart/veitur-meter-reader/assets/3597603/703e81e8-101b-4de5-b64b-cf1c2da8bab4)
