@@ -5,6 +5,7 @@
 #include <cstdint>
 
 #include "esphome/components/sensor/sensor.h"
+#include "esphome/components/text_sensor/text_sensor.h"
 #include "esphome/components/uart/uart.h"
 #include "esphome/core/component.h"
 
@@ -52,6 +53,7 @@ class VeiturMeter : public Component, public uart::UARTDevice {
   void set_energy_content_volume_sensor(sensor::Sensor *sensor) { this->energy_content_volume_sensor_ = sensor; }
   void set_energy_flow_rate_sensor(sensor::Sensor *sensor) { this->energy_flow_rate_sensor_ = sensor; }
   void set_meter_id_sensor(sensor::Sensor *sensor) { this->meter_id_sensor_ = sensor; }
+  void set_meter_id_text_sensor(text_sensor::TextSensor *sensor) { this->meter_id_text_sensor_ = sensor; }
 
  protected:
   struct MeterReadings {
@@ -88,6 +90,7 @@ class VeiturMeter : public Component, public uart::UARTDevice {
     float energy_content_volume = NAN;
     float energy_flow_rate = NAN;
     float meter_id = NAN;
+    char meter_id_text[64]{};
   };
 
   void reset_buffer_();
@@ -97,12 +100,21 @@ class VeiturMeter : public Component, public uart::UARTDevice {
   void decode_meter_line_(const char *full_code, const char *value, const char *line);
   void publish_readings_();
   void publish_sensor_(sensor::Sensor *target, float value);
+  static uint16_t crc16_update_(uint16_t crc, uint8_t data);
+  void start_telegram_crc_();
+  void track_crc_byte_(uint8_t byte);
+  bool validate_telegram_crc_();
 
   static const int BUFFER_SIZE = 256;
   char line_buffer_[BUFFER_SIZE];
   int buffer_pos_{0};
   bool discarding_line_{false};
   MeterReadings readings_;
+  uint16_t telegram_crc_{0};
+  bool crc_active_{false};
+  bool checksum_active_{false};
+  char checksum_[5]{};
+  uint8_t checksum_pos_{0};
 
   sensor::Sensor *cumulative_active_import_sensor_{nullptr};
   sensor::Sensor *cumulative_active_export_sensor_{nullptr};
@@ -137,6 +149,7 @@ class VeiturMeter : public Component, public uart::UARTDevice {
   sensor::Sensor *energy_content_volume_sensor_{nullptr};
   sensor::Sensor *energy_flow_rate_sensor_{nullptr};
   sensor::Sensor *meter_id_sensor_{nullptr};
+  text_sensor::TextSensor *meter_id_text_sensor_{nullptr};
 };
 
 }  // namespace veitur_meter
